@@ -1,11 +1,20 @@
-PDFS = $(wildcard *.pdf)
+PDFS = $(wildcard */*/*.pdf)
 TEXT = $(patsubst %.pdf,%.text,$(PDFS))
-CLEAN = $(patsubst %.text,%.clean,$(TEXT))
+CLEANTEXT = $(patsubst %.text,%.cleantext,$(TEXT))
+EXPORT = $(patsubst %.cleantext,%.txt,$(CLEANTEXT))
 
-clean: text $(CLEAN)
+export: exportdir cleantext $(EXPORT)
 
-%.clean: %.text
-	cat $< | ./stuff.pl > $@
+exportdir:
+	mkdir -p export
+
+%.txt: %.cleantext
+	cp $< export/`basename $@`
+
+cleantext: text $(CLEANTEXT)
+
+%.cleantext: %.text
+	cat $< | ./cleaner > $@
 
 text: $(TEXT)
 
