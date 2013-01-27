@@ -1,12 +1,15 @@
 #!/usr/bin/perl
+#use feature 'unicode_strings';
+#use utf8;
+
 $references = 0;
 while($line = <>) {
     $line =~ s/-\n//g;
     $line =~ s/  +/ /g;
     $line =~ s/[^\s\w -.;?!,öäåÖÄÅ]//g;
-    $line =~ s/(\w)\?+/$1?/g;
+    $line =~ s/([\wöäåÖÄÅ])\?+/$1?/g;
     $line =~ s/\W+[\?!]+//g;
-    if ($line =~ /^REFERENSER\n$/) {
+    if ($line =~ /^\s*REFERENSER\s*$/i) {
         $references = 1;
     }
     if (!$references) {
