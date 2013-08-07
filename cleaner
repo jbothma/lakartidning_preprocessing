@@ -1,14 +1,22 @@
 #!/usr/bin/perl
 #use feature 'unicode_strings';
 #use utf8;
+#use Text::Unidecode qw( unidecode );
 
 $references = 0;
 while($line = <>) {
-    $line =~ s/-\n//g;
+#    $line =~ s/-\n//g;
+#    $line =~ s/[^\s\w -.;?!,öäåÖÄÅ]//g;
+#    $line =~ s/([\wöäåÖÄÅ])\?+/$1?/g;
+#    $line =~ s/\W+[\?!]+//g;
+    $line =~ s/ \[/[/g;
+    $line =~ s/\[[\d, -]+\]//g;
     $line =~ s/  +/ /g;
-    $line =~ s/[^\s\w -.;?!,öäåÖÄÅ]//g;
-    $line =~ s/([\wöäåÖÄÅ])\?+/$1?/g;
-    $line =~ s/\W+[\?!]+//g;
+    $line =~ s/\xe2\x80\x93/-/g;        # dash
+    $line =~ s/\xe2\x80\xa2/- /g;       # bullet
+    $line =~ s/(\xc2\xbb|\xc2\xab)/"/g; # angle quotation marks
+#    $line =~ s/(\p{Punct}+)/ unidecode($1) /eg;
+
     if ($line =~ /^\s*REFERENSER\s*$/i) {
         $references = 1;
     }
